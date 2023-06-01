@@ -190,63 +190,92 @@ namespace BlackJack {
 			}
 		}
 
-		static void Program3(int scorePlayer = 0, int scoreDealer = 0) {
-			//if (scorePlayer != 0 && scoreDealer != 0) Console.WriteLine("\n");
+		static void Program3(int handScorePlayer = 0, int handScoreDealer = 0) {
+			Console.WriteLine("[CURRENT SCORE]");
+			Console.WriteLine($"Player: [{handScorePlayer}]");
+			Console.WriteLine($"Dealer: [{handScoreDealer}]");
 
-			//Deck d = new();
-			//BJHand player = new(d, 4);
+			Deck d = new();
+			BJHand player = new(d, 2);
 
-			//d.Shuffle();
+			d.Shuffle();
 
-			//BJHand dealer = new(d, 4);
+			BJHand dealer = new(d, 2);
 
-			//Console.WriteLine("[Is the player's hand greater than the dealer's hand]");
-			//Console.WriteLine($"\n\nPlayer's hand - [\n{player}].");
-			//Console.WriteLine($"\n\nDealer's hand - [\n{dealer}].");
-			//Console.WriteLine($"\n\nPlayer's total - [{player.Score}].");
-			//Console.WriteLine($"\n\nDealer's total - [{dealer.Score}].");
+			Console.WriteLine("\n\n[Is the player's hand greater than the dealer's hand]");
 
-			//if (player.Score > dealer.Score) {
-			//	scorePlayer++;
-			//	Console.WriteLine("\n\nYou won! Your hand's score was the same as the dealer's score.");
-			//	PlayAgain(scorePlayer, scoreDealer);
-			//}
-			//else if (player.Score >= 17) {
-			//	Console.WriteLine("\n\nYou lost... Your hand's score was higher then or equal to the value, 17.");
+			Console.WriteLine($"\n\nPlayer's hand - [\n{player}].");
+			Console.WriteLine($"\n\nDealer's hand - [\n{dealer}].");
+			Console.WriteLine($"\n\nPlayer's total - [{player.Score}].");
+			Console.WriteLine($"\n\nDealer's total - [{dealer.Score}].");
 
-			//	PlayAgain(scorePlayer, scoreDealer);
-			//}
-			//else if (player.Score <= 16) {
-			//	Console.WriteLine("\n\nPlay again?. Your hand's score was lower then or equal to the value, 16.");
-			//	Console.Write("\n\nENTER \"HIT\" to add more card (or) \"STOP\" to stop: ");
-			//	string promptHIt = Console.ReadLine();
-			//	if (promptHIt == "hit" || promptHIt == "HIT") {
-			//		Card c = new();
+			CheckScores(player, dealer, handScorePlayer, handScoreDealer);
 
-			//		player.AddCard(c);
+			static void CheckScores(BJHand player, BJHand dealer, int handScorePlayer, int handScoreDealer) {
+				if (player.Score <= 16) {
+					Console.WriteLine("\n\nYou must hit again. Your hand value is less than or equal to [16].");
 
-			//		Console.WriteLine($"\n\nPlayer's total - [{player.Score}].");
-			//		PlayAgain(scorePlayer, scoreDealer);
-			//	}
-			//}
+					HitAgain(player, dealer, handScorePlayer, handScoreDealer);
+				}
+				else if (player.Score >= 17) {
+					if (player.Score <= dealer.Score) {
+						Console.WriteLine("\n\nYou won! Your hand value was greater or equal to [17] and lower then the dealer's.");
 
-			//static void PlayAgain(int scorePlayer, int scoreDealer) {
-			//	Console.WriteLine("\n\nPlay again? ENTER [Y]\\[N]: ");
+						handScorePlayer++;
 
-			//	string promptAgain = Console.ReadLine();
+						PlayAgain(handScorePlayer, handScoreDealer);
+					}
+					else {
+						Console.WriteLine("\n\nYou lost... Your hand value was greater or equal to [17] and higher then the dealer's.");
 
-			//	if (promptAgain == "y" || promptAgain == "Y") Program3(scorePlayer, scoreDealer);
+						handScoreDealer++;
 
-			//	Console.WriteLine();
+						PlayAgain(handScorePlayer, handScoreDealer);
+					}
+				}
 
-			//	Environment.Exit(0);
-			//}
+				static void HitAgain(BJHand player, BJHand dealer, int handScorePlayer, int handScoreDealer) {
+					Console.Write("\n\nHit again? Enter [HIT] to hit again or [STOP] to stop:  ");
+
+					string promptHIt = Console.ReadLine();
+
+					if (promptHIt == "hit" || promptHIt == "HIT") {
+						Random generator = new();
+						Card c = new(generator.Next(1, 4), generator.Next(1, 13));
+
+						player.AddCard(c);
+
+						Console.WriteLine($"\n\nPlayer's hand - [\n{player}].");
+						Console.WriteLine($"\n\nDealer's hand - [\n{dealer}].");
+						Console.WriteLine($"\n\nPlayer's total - [{player.Score}].");
+						Console.WriteLine($"\n\nDealer's total - [{dealer.Score}].");
+
+						CheckScores(player, dealer, handScorePlayer, handScoreDealer);
+					}
+
+					Console.WriteLine();
+				}
+
+				static void PlayAgain(int handScorePlayer, int handScoreDealer) {
+					Console.Write("\n\nPlay again? [Y/N]: ");
+
+					string promptPlayAgain = Console.ReadLine();
+
+					Console.WriteLine();
+
+					if (promptPlayAgain == "y" || promptPlayAgain == "Y") {
+						Console.Clear();
+
+						Program3(handScorePlayer, handScoreDealer);
+					}
+				}
+			}
 		}
 
 		static void Main() {
 			Program1();
 			Program2();
-			//Program3();
+			Program3();
 		}
 	}
 }

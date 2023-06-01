@@ -7,20 +7,18 @@ using System.Threading.Tasks;
 namespace CardClasses {
 	public class Deck {
 		// can instantiate the list here OR in the constructor
-		private List<Card> cards = new List<Card>();
+		private readonly List<Card> cards = new List<Card>();
 
 		public Deck() {
 			for (int value = 1; value <= 13; value++) for (int suit = 1; suit <= 4; suit++) cards.Add(new Card(suit, value));
 		}
 
-		// read-only property
 		public int NumCards {
 			get {
 				return cards.Count;
 			}
 		}
 
-		// read-only property
 		public bool IsEmpty {
 			get {
 				return (cards.Count == 0);
@@ -47,6 +45,7 @@ namespace CardClasses {
 
 		public void Shuffle() {
 			Random gen = new Random();
+
 			for (int i = 0; i < NumCards; i++) {
 				int rnd = gen.Next(0, NumCards);
 
